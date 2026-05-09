@@ -1,0 +1,26 @@
+{
+  "name": "xgis-label3d-mars3d-example",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@cesium/engine": "23.0.0",
+    "mars3d": "~3.11.0",
+    "mars3d-cesium": "^1.139.0",
+    "vue": "^3.5.34",
+    "xgis-label3d": "^0.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/tsconfig": "^0.9.1",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.11",
+    "vite-plugin-mars3d": "^4.2.2",
+    "vue-tsc": "^3.2.8"
+  }
+}
