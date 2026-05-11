@@ -20,7 +20,7 @@ var t = Object.defineProperty;
 			} finally {
 				e.delete(n.id);
 			}
-		}), p(t, e, [], void 0);
+		}), d(t, e, [], void 0);
 	}(t))
 }], ["throw", {
 	canHandle: (t) => a(t) && s in t,
@@ -53,45 +53,45 @@ function c(t, n = globalThis, r = ["*"]) {
 			}
 			return !1;
 		}(r, o.origin)) return void console.warn(`Invalid origin '${o.origin}' for comlink proxy`);
-		const { id: h, type: l, path: f } = Object.assign({ path: [] }, o.data), d = (o.data.argumentList || []).map(w);
-		let p;
+		const { id: h, type: l, path: f } = Object.assign({ path: [] }, o.data), p = (o.data.argumentList || []).map(w);
+		let d;
 		try {
 			const n = f.slice(0, -1).reduce((t, e) => t[e], t), r = f.reduce((t, e) => t[e], t);
 			switch (l) {
 				case "GET":
-					p = r;
+					d = r;
 					break;
 				case "SET":
-					n[f.slice(-1)[0]] = w(o.data.value), p = !0;
+					n[f.slice(-1)[0]] = w(o.data.value), d = !0;
 					break;
 				case "APPLY":
-					p = r.apply(n, d);
+					d = r.apply(n, p);
 					break;
 				case "CONSTRUCT":
-					p = function(t) {
+					d = function(t) {
 						return Object.assign(t, { [e]: !0 });
-					}(new r(...d));
+					}(new r(...p));
 					break;
 				case "ENDPOINT":
 					{
 						const { port1: e, port2: n } = new MessageChannel();
-						c(t, n), p = function(t, e) {
-							return g.set(t, e), t;
+						c(t, n), d = function(t, e) {
+							return y.set(t, e), t;
 						}(e, [e]);
 					}
 					break;
 				case "RELEASE":
-					p = void 0;
+					d = void 0;
 					break;
 				default: return;
 			}
 		} catch (t) {
-			p = {
+			d = {
 				value: t,
 				[s]: 0
 			};
 		}
-		Promise.resolve(p).catch((t) => ({
+		Promise.resolve(d).catch((t) => ({
 			value: t,
 			[s]: 0
 		})).then((e) => {
@@ -119,17 +119,17 @@ function l(t) {
 		u(t);
 	});
 }
-const f = /* @__PURE__ */ new WeakMap(), d = "FinalizationRegistry" in globalThis && new FinalizationRegistry((t) => {
+const f = /* @__PURE__ */ new WeakMap(), p = "FinalizationRegistry" in globalThis && new FinalizationRegistry((t) => {
 	const e = (f.get(t) || 0) - 1;
 	f.set(t, e), 0 === e && l(t);
 });
-function p(t, e, i = [], s = function() {}) {
+function d(t, e, i = [], s = function() {}) {
 	let a = !1;
 	const o = new Proxy(s, {
 		get(n, s) {
 			if (h(a), s === r) return () => {
 				(function(t) {
-					d && d.unregister(t);
+					p && p.unregister(t);
 				})(o), l(t), e.clear(), a = !0;
 			};
 			if ("then" === s) {
@@ -140,7 +140,7 @@ function p(t, e, i = [], s = function() {}) {
 				}).then(w);
 				return n.then.bind(n);
 			}
-			return p(t, e, [...i, s]);
+			return d(t, e, [...i, s]);
 		},
 		set(n, r, s) {
 			h(a);
@@ -155,8 +155,8 @@ function p(t, e, i = [], s = function() {}) {
 			h(a);
 			const c = i[i.length - 1];
 			if (c === n) return E(t, e, { type: "ENDPOINT" }).then(w);
-			if ("bind" === c) return p(t, e, i.slice(0, -1));
-			const [u, l] = y(o);
+			if ("bind" === c) return d(t, e, i.slice(0, -1));
+			const [u, l] = g(o);
 			return E(t, e, {
 				type: "APPLY",
 				path: i.map((t) => t.toString()),
@@ -165,7 +165,7 @@ function p(t, e, i = [], s = function() {}) {
 		},
 		construct(n, r) {
 			h(a);
-			const [s, o] = y(r);
+			const [s, o] = g(r);
 			return E(t, e, {
 				type: "CONSTRUCT",
 				path: i.map((t) => t.toString()),
@@ -175,15 +175,15 @@ function p(t, e, i = [], s = function() {}) {
 	});
 	return function(t, e) {
 		const n = (f.get(e) || 0) + 1;
-		f.set(e, n), d && d.register(t, e, t);
+		f.set(e, n), p && p.register(t, e, t);
 	}(o, t), o;
 }
-function y(t) {
+function g(t) {
 	const e = t.map(m);
 	return [e.map((t) => t[0]), (n = e.map((t) => t[1]), Array.prototype.concat.apply([], n))];
 	var n;
 }
-const g = /* @__PURE__ */ new WeakMap();
+const y = /* @__PURE__ */ new WeakMap();
 function m(t) {
 	for (const [e, n] of o) if (n.canHandle(t)) {
 		const [r, i] = n.serialize(t);
@@ -196,7 +196,7 @@ function m(t) {
 	return [{
 		type: "RAW",
 		value: t
-	}, g.get(t) || []];
+	}, y.get(t) || []];
 }
 function w(t) {
 	switch (t.type) {
@@ -265,8 +265,8 @@ var x = class t {
 				}
 				continue;
 			}
-			const f = l + h >> 1, d = s[2 * f], p = s[2 * f + 1];
-			d >= t && d <= n && p >= e && p <= r && c.push(i[f]), (0 === u ? t <= d : e <= p) && (o.push(l), o.push(f - 1), o.push(1 - u)), (0 === u ? n >= d : r >= p) && (o.push(f + 1), o.push(h), o.push(1 - u));
+			const f = l + h >> 1, p = s[2 * f], d = s[2 * f + 1];
+			p >= t && p <= n && d >= e && d <= r && c.push(i[f]), (0 === u ? t <= p : e <= d) && (o.push(l), o.push(f - 1), o.push(1 - u)), (0 === u ? n >= p : r >= d) && (o.push(f + 1), o.push(h), o.push(1 - u));
 		}
 		return c;
 	}
@@ -283,8 +283,8 @@ var x = class t {
 				for (let n = l; n <= h; n++) T(i[2 * n], i[2 * n + 1], t, e) <= c && o.push(r[n]);
 				continue;
 			}
-			const f = l + h >> 1, d = i[2 * f], p = i[2 * f + 1];
-			T(d, p, t, e) <= c && o.push(r[f]), (0 === u ? t - n <= d : e - n <= p) && (a.push(l), a.push(f - 1), a.push(1 - u)), (0 === u ? t + n >= d : e + n >= p) && (a.push(f + 1), a.push(h), a.push(1 - u));
+			const f = l + h >> 1, p = i[2 * f], d = i[2 * f + 1];
+			T(p, d, t, e) <= c && o.push(r[f]), (0 === u ? t - n <= p : e - n <= d) && (a.push(l), a.push(f - 1), a.push(1 - u)), (0 === u ? t + n >= p : e + n >= d) && (a.push(f + 1), a.push(h), a.push(1 - u));
 		}
 		return o;
 	}
@@ -330,12 +330,12 @@ function I(t, e, n = 0) {
 	const r = 6378137, i = 6356752.314245179, s = r * r, a = i * i;
 	t *= Math.PI / 180, e *= Math.PI / 180;
 	const o = Math.cos(e), c = o * Math.cos(t), u = o * Math.sin(t), h = Math.sin(e);
-	let l = s * c, f = s * u, d = a * h;
-	const p = Math.sqrt(c * l + u * f + h * d);
-	return l /= p, f /= p, d /= p, {
+	let l = s * c, f = s * u, p = a * h;
+	const d = Math.sqrt(c * l + u * f + h * p);
+	return l /= d, f /= d, p /= d, {
 		x: l + c * n,
 		y: f + u * n,
-		z: d + h * n
+		z: p + h * n
 	};
 }
 function R(t) {
@@ -349,8 +349,8 @@ var k = ((e, n) => {
 	});
 	return n || t(r, Symbol.toStringTag, { value: "Module" }), r;
 })({
-	cancelPromise: () => C,
-	checkRectangleNoIntersect: () => V,
+	cancelPromise: () => N,
+	checkRectangleIsIntersect: () => V,
 	clear: () => W,
 	deleteLabelRectangle: () => $,
 	filterByBounds: () => H,
@@ -359,7 +359,7 @@ var k = ((e, n) => {
 	getLabelPointList: () => F,
 	isOverlapping: () => G,
 	isPointOnFrontOfGlobe: () => D,
-	loadLabelPoints: () => N
+	loadLabelPoints: () => C
 });
 let z = /* @__PURE__ */ new Map(), O = /* @__PURE__ */ new Map();
 function U(t, e) {
@@ -388,7 +388,7 @@ function _(t, e) {
 	}
 	return n;
 }
-async function N(t, e, n) {
+async function C(t, e, n) {
 	if (!t || z.has(t)) return;
 	let r = await (await fetch(e)).json();
 	if (!r) return;
@@ -399,26 +399,26 @@ async function N(t, e, n) {
 		for (let t = 0; t < u; t++) {
 			const r = i[t], u = r.properties;
 			if (u) {
-				const i = u[a], f = u[o], d = r.geometry.coordinates;
-				let p, y, g, m = c, w = !1;
+				const i = u[a], f = u[o], p = r.geometry.coordinates;
+				let d, g, y, m = c, w = !1;
 				if (n.excludeValue && (w = U(f, n)), w) {
 					const t = _(f, n);
-					t && (p = {
+					t && (d = {
 						...n,
 						...t
-					}, m = 1.2 * (p.fontSize ?? 12), P(p.near) && (y = p.near, e > p.near && (e = p.near)), P(p.far) && (g = p.far, s < p.far && (s = p.far)));
-				} else p = void 0;
+					}, m = 1.2 * (d.fontSize ?? 12), P(d.near) && (g = d.near, e > d.near && (e = d.near)), P(d.far) && (y = d.far, s < d.far && (s = d.far)));
+				} else d = void 0;
 				const E = {
 					id: t,
 					name: i,
-					minHeight: y,
-					maxHeight: g,
-					position: I(d[0], d[1]),
+					minHeight: g,
+					maxHeight: y,
+					position: I(p[0], p[1]),
 					textWidth: m * i.length,
 					textHeight: m,
-					itemStyleContent: p
+					itemStyleContent: d
 				};
-				h.add(d[0], d[1]), l.push(E);
+				h.add(p[0], p[1]), l.push(E);
 			}
 		}
 		return h.finish(), z.set(t, {
@@ -432,17 +432,26 @@ async function N(t, e, n) {
 		};
 	}
 }
-function C(t) {
+function N(t) {
 	O.set(t, !0);
 }
-function H(t, e, n) {
+function H(t, e, n, r = !1) {
 	if (!e || !z.has(t)) return;
-	const r = z.get(t);
-	if (!r) return;
+	const i = z.get(t);
+	if (!i) return;
 	O.set(t, !1);
-	const i = R(e.west), s = R(e.east), a = R(e.north), o = R(e.south), c = r.indexKDB.range(i, o, s, a);
-	if (O.get(t)) throw c.length = 0, /* @__PURE__ */ new Error("0");
-	return c;
+	const s = R(e.west), a = R(e.east), o = R(e.north), c = R(e.south), u = i.indexKDB.range(s, c, a, o);
+	if (O.get(t)) throw u.length = 0, /* @__PURE__ */ new Error("0");
+	if (n > 0) {
+		const e = u.length, s = [];
+		for (let a = 0; a < e; a++) {
+			if (O.get(t)) throw s.length = 0, u.length = 0, /* @__PURE__ */ new Error("0");
+			const e = u[a], o = i.ptList[e];
+			null != o.maxHeight && null != o.minHeight ? n >= o.minHeight && n <= o.maxHeight && s.push(e) : r && s.push(e);
+		}
+		return u.length = 0, s;
+	}
+	return u;
 }
 function j(t, e) {
 	if (!z.has(t)) return;
@@ -455,16 +464,16 @@ function j(t, e) {
 	}
 	return r;
 }
-function B(t, e, n) {
+function B(t, e) {
 	if (!z.has(t)) return;
-	const r = z.get(t);
-	if (!r) return;
-	const i = [], s = e.length;
-	for (let a = 0; a < s; a++) {
-		const t = e[a], s = r.ptList[t];
-		null != s.maxHeight && null != s.minHeight && n >= s.minHeight && n <= s.maxHeight && i.push(s);
+	const n = z.get(t);
+	if (!n) return;
+	const r = [], i = e.length;
+	for (let s = 0; s < i; s++) {
+		const t = e[s], i = n.ptList[t];
+		r.push(i);
 	}
-	return i;
+	return r;
 }
 function D(t, e) {
 	return !(function(t, e) {

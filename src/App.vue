@@ -65,12 +65,12 @@ const poiList = [
 function loadLabelLayer(labelLayerManager: LabelLayerManager, data: any) {
   const styleOptions = data.styleOptions;//LabelGeojsonLayer
   const labelLayer = new LabelMassiveWSLayer(data.id, data.url, styleOptions);
-  labelLayer.attr = {
-    type: "注记", //'model3d',
-    layerID: data.id,
-    layerName: data.layerName,
-    kind: "geojson",
-  };
+  // labelLayer.attr = {
+  //   type: "注记", //'model3d',
+  //   layerID: data.id,
+  //   layerName: data.layerName,
+  //   kind: "geojson",
+  // };
   labelLayerManager.addLabelLayer(labelLayer);
 }
 
@@ -151,7 +151,7 @@ onMounted(() => {
       ]
     };
 
-    //用于国家和省、市地名LabelGeojsonWSLayer LabelMassiveWSLayer
+    //用于国家和省、市地名LabelGeojsonWSLayer \LabelMassiveWSLayer都行
     const labelLayer = new LabelGeojsonWSLayer('chinaPlaces1', '/poi/chinaData.json', defaultStyleObject);//labelStyleObject
     // labelLayer.attr = {
     //   type: '注记',
@@ -161,10 +161,10 @@ onMounted(() => {
     // }
     labelLayerManager.addLabelLayer(labelLayer);
 
-    //遍历加载注记图层
-    //poiList.forEach((item) => {
-    // loadLabelLayer(labelLayerManager,item);
-    //});
+    //遍历加载注记图层-湖南地名
+    poiList.forEach((item) => {
+    loadLabelLayer(labelLayerManager,item);
+    });
 
     //加载中国省级行政区矢量注记'https://zorrowm.github.io/data/poi/chinaProvince.json'
     //用于大级别字段比较密的数据
@@ -177,9 +177,9 @@ onMounted(() => {
     // }
     // labelLayerManager.addLabelLayer(labelLayer);
 
-    // 调整相机视角到中国北京附近 (经度,纬度,高度113.153, 28.226,)
+    // 调整相机视角到中国北京附近 (经度,纬度,高度)116.3974, 39.9093,
     viewer.camera.setView({
-      destination: Cesium.Cartesian3.fromDegrees(116.3974, 39.9093, 10000000.0),
+      destination: Cesium.Cartesian3.fromDegrees(113.153, 28.226, 1000000.0),
       orientation: {
         heading: Cesium.Math.toRadians(0.0),
         pitch: Cesium.Math.toRadians(-90.0),
