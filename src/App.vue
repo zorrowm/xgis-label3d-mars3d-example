@@ -79,7 +79,7 @@ function loadLabelLayer(labelLayerManager: LabelLayerManager, data: any) {
 let map: mars3d.Map | null = null;
 onMounted(() => {
   map = new mars3d.Map('mars3dContainer' as any, {
-    // basemaps: [{ name: "天地图", type: "tdt", layer: "img_d", show: true }]
+    basemaps: [{ name: "天地图", type: "tdt", layer: "img_d", show: true }]
   });
 
   if (map) {
